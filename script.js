@@ -165,9 +165,11 @@ function runtime() {
                         document.getElementById("ui").innerText = next.slice(0, index)
                         index++
                     } else {
-                        document.getElementById("ui").style.opacity = 0
-                        document.getElementById("playAgain").style.zIndex = 3
-                        document.getElementById("playAgain").style.opacity = 1
+                        setTimeout(() => {
+                            document.getElementById("ui").style.opacity = 0
+                            document.getElementById("playAgain").style.zIndex = 3
+                            document.getElementById("playAgain").style.opacity = 1
+                        }, 500)
                         clearInterval(id)
                     }
                 }, 100)

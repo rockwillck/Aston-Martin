@@ -1,0 +1,87 @@
+<style>
+    body {
+        background-color:black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    canvas {
+        position:absolute;
+        margin:0;
+        padding:0;
+        background-color: rgb(165, 85, 85);
+    }
+
+    .overlay {
+        position:absolute;
+        width:100%;
+        height:100%;
+        z-index: 2;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 4vw;
+        font-family: Arial, Helvetica, sans-serif;
+        opacity: 0.2;
+    }
+
+    .menu {
+        position:absolute;
+        z-index: 3;
+        width:100%;
+        height:100%;
+        background-color: black;
+        color:white;
+        transition: 0.2s;
+    }
+
+    .menuContent {
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+        text-align: center;
+        font-family: Rubik;
+        font-size: 4vmin;
+    }
+
+    @font-face {
+        font-family: 'Rubik';
+        src: url('rubik.ttf');
+    }
+
+    button {
+        border:none;
+        border-radius: 2vmin;
+        background:none;
+        color:orange;
+        font-family: Rubik;
+        font-size: 6vmin;
+        transition: 0.2s;
+        padding:2vmin;
+    }
+    button:hover {
+        background-color: orange;
+        color:white;
+    }
+    button:active {
+        color:darkorange;
+    }
+</style>
+
+<body onresize="resized()">
+    <canvas id="canvas"></canvas>
+    <div class="overlay"><h1 id="ui">PRESS A/D TO STEER</h1></div>
+    <div class="menu" id="menu">
+        <div class="menuContent">
+            <h3>Seokhyun's</h3>
+            <h1>Aston Martin</h1>
+            <button onclick="begin()">Drive</button>
+        </div>
+    </div>
+</body>
+
+<script src="systems.js"></script>
+<script src="script.js"></script>
+<script src="runtime.js"></script>

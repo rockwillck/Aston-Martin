@@ -3,11 +3,11 @@ dpressed = false
 ad = false
 function keydown(key) {
     if (key == "a" || key == "ArrowLeft") {
-        velocity[0] = -0.1
+        velocity[0] = -0.05
         apressed = true
     }
     if (key == "d" || key == "ArrowRight") {
-        velocity[0] = 0.1
+        velocity[0] = 0.05
         dpressed = true
     }
 }
@@ -18,13 +18,15 @@ function keyup(key) {
     }
 }
 
-function begin() {
+var follow = true
+function begin(f) {
     document.getElementById("menu").style.opacity = 0
     started = true
     var audio = new Audio("highoctane.mp3")
     audio.volume = 5/10
     audio.loop = true
     audio.play();
+    follow = f
 }
 
 var direction = 0
@@ -40,6 +42,17 @@ var score = 0
 var started = false
 function runtime() {
     if (started) {
+        ctx.fillStyle = "gray"
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+        ctx.save()
+        if (follow) {
+            ctx.scale(2, 2)
+            ctx.translate(canvas.width/4, canvas.height/4)
+            ctx.rotate(-direction + Math.PI/2)
+            // ctx.rotate(-direction)
+            ctx.translate(-front[0], -front[1])
+        }
+
         if (apressed && dpressed && !ad) {
             id = setInterval(() => {
                 if (document.getElementById("ui").innerText.length > 0) {
@@ -63,21 +76,20 @@ function runtime() {
         }
         direction += velocity[0]
     
-        ctx.fillStyle = "gray"
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-    
         position = [(front[0] + front[0] + Math.cos(direction)*carLength)/2, (front[1] + front[1] + Math.sin(direction)*carLength)/2]
     
         back = [front[0] + Math.cos(direction)*carLength, front[1] + Math.sin(direction)*carLength]
-        if (back[0] < -carLength) {
-            front[0] = canvas.width
-        } else if (back[0] > canvas.width + carLength) {
-            front[0] = 0
-        }
-        if (back[1] < -carLength) {
-            front[1] = canvas.height
-        } else if (back[1] > canvas.height + carLength) {
-            front[1] = 0
+        if (!follow) {
+            if (back[0] < -carLength) {
+                front[0] = canvas.width
+            } else if (back[0] > canvas.width + carLength) {
+                front[0] = 0
+            }
+            if (back[1] < -carLength) {
+                front[1] = canvas.height
+            } else if (back[1] > canvas.height + carLength) {
+                front[1] = 0
+            }
         }
     
         front[0] -= Math.cos(direction)*velocity[1]
@@ -107,6 +119,16 @@ function runtime() {
                 tracks.splice(index, 1)
             }
         })
+    
+        if ((back[0] < -carLength || back[0] > canvas.width + carLength || back[1] < -carLength || back[1] > canvas.height + carLength) && follow) {
+            ctx.beginPath()
+            ctx.moveTo(position[0], position[1])
+            ctx.lineTo(canvas.width/2, canvas.height/2)
+            ctx.closePath()
+            ctx.strokeStyle = ["rgb(150, 150, 150)", "rgb(250, 50, 50)"][Math.floor((frame % 50)/25)]
+            ctx.lineWidth = 15
+            ctx.stroke()
+        }
     
         car = new Image()
         car.src = "aston.png"
@@ -143,6 +165,9 @@ function runtime() {
                         document.getElementById("ui").innerText = next.slice(0, index)
                         index++
                     } else {
+                        document.getElementById("ui").style.opacity = 0
+                        document.getElementById("playAgain").style.zIndex = 3
+                        document.getElementById("playAgain").style.opacity = 1
                         clearInterval(id)
                     }
                 }, 100)
@@ -150,7 +175,30 @@ function runtime() {
                 document.getElementById("ui").innerText = score
             }
         }
-    
+
         frame++
+        ctx.restore()
+        
+        if (follow && ad) {
+            ctx.save()
+            ctx.globalAlpha = 0.5
+            ctx.fillStyle = "black"
+            ctx.fillRect(10, 10, 300, 200)
+            ctx.restore()
+            ctx.save()
+            ctx.rect(10, 10, 300, 200)
+            ctx.clip()
+            ctx.beginPath()
+            ctx.arc(10 + position[0]*300/1536, 10 + position[1]*200/1024, 10, 0, 2*Math.PI)
+            ctx.closePath()
+            ctx.fillStyle = "yellow"
+            ctx.fill()
+            ctx.beginPath()
+            ctx.arc(10 + target[0]*300/1536, 10 + target[1]*200/1024, 10, 0, 2*Math.PI)
+            ctx.closePath()
+            ctx.fillStyle = "red"
+            ctx.fill()
+            ctx.restore()
+        }
     }
 }

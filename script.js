@@ -20,13 +20,15 @@ function keyup(key) {
 
 var follow = true
 function begin(f) {
-    document.getElementById("menu").style.opacity = 0
-    started = true
-    var audio = new Audio("highoctane.mp3")
-    audio.volume = 5/10
-    audio.loop = true
-    audio.play();
-    follow = f
+    if (!started) {
+        document.getElementById("menu").style.opacity = 0
+        started = true
+        var audio = new Audio("highoctane.mp3")
+        audio.volume = 5/10
+        audio.loop = true
+        audio.play();
+        follow = f
+    }
 }
 
 var direction = 0

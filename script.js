@@ -2,18 +2,18 @@ apressed = false
 dpressed = false
 ad = false
 function keydown(key) {
-    if (key == "a" || key == "ArrowLeft") {
+    if (key.toLowerCase() == "a" || key == "ArrowLeft") {
         velocity[0] = -0.05
         apressed = true
     }
-    if (key == "d" || key == "ArrowRight") {
+    if (key.toLowerCase() == "d" || key == "ArrowRight") {
         velocity[0] = 0.05
         dpressed = true
     }
 }
 
 function keyup(key) {
-    if ((key == "a" && velocity[0] < 0) || (key == "ArrowLeft" && velocity[0] < 0) || (key == "d" && velocity[0] > 0) || (key == "ArrowRight" && velocity[0] > 0)) {
+    if ((key.toLowerCase() == "a" && velocity[0] < 0) || (key == "ArrowLeft" && velocity[0] < 0) || (key.toLowerCase() == "d" && velocity[0] > 0) || (key == "ArrowRight" && velocity[0] > 0)) {
         velocity[0] = 0
     }
 }
